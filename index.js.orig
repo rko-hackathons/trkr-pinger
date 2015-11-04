@@ -1,0 +1,147 @@
+#!/usr/bin/env node
+
+//var request2 = require('request').debug = true;
+var request = require('request');
+require('request-debug')(request);
+
+var argv = require('optimist').argv,
+//  parser = require('./lib/parser'),
+  latLon = argv.l || process.env.PINGER_LATLON || null,
+  uid = argv.u || null,
+  delay = argv.d || 1,
+  steps = argv.n || 1,
+  stat = argv.s || "ok";
+
+
+var help = "Usage: pinger [OPTION]\n\
+Send ping(s) to TRKR based on [OPTION].\n\
+  -u=uid\t\tSet user ID\n\
+  -d=delay\t\tset delay in minutes\n\
+  -r\t\t\tMove randomly between steps\n\
+  -n=steps\t\tRun N steps\n\
+  -s=status\t\tSet status string\n\
+  -l=latlon\t\tThe latitude,longitude co-ordinates for the location";
+
+if (argv.help) {
+  console.log(help);
+  process.exit(0);
+}
+
+if (uid === null) {
+  console.error('Missing required user id');
+  console.error(help);
+  process.exit(1);
+}
+if (latLon === null)  {
+  console.error('Missing required lat/lon co-ordinates');
+  console.error(help);
+  process.exit(1);
+}
+
+//var apiEndPoint = 
+
+/***
+if (stat) {
+  apiEndPoint += '&status=' + stat;
+}
+***/
+
+// break lat lon out to two variables
+var comma = latLon.indexOf(",");
+var lat = latLon.substr(0,comma);
+var lon = latLon.substr(comma+1,latLon.length);
+console.log("lat = " + lat + " lon = " + lon);
+
+var headers = {
+  'User-Agent':       'Super Agent/0.0.1',
+  'Accept': 'text/html,application/json,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en-us,en;q=0.5',
+  'Accept-Encoding': 'gzip, deflate',
+  'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+  // 'Connection': 'keep-alive',
+  'Cache-Control': 'max-age=0',
+  'Content-Type': 'application/json'
+};
+
+function callback(error, response, body) {
+	console.log("in callback");
+    if (error) {
+        console.log(error);
+        //process.exit(1);
+	//throw error;
+    }
+
+    if (response.statusCode != 201) {
+           console.error('Unexpected status code from TRKR -> ' + 
+		response.statusCode);
+           //process.exit(1);
+    }
+
+    //var info = JSON.parse(body);
+    console.log(response.statusCode, body);
+
+	/***
+	try {
+    		var data = JSON.parse(body2);
+   		console.log(parser.currently(data, degrees, argv));
+
+   		 //process.exit(0);
+  	} catch (e) {
+   		 console.log(e);
+   		 console.error('unabled to parse TRKR data');
+    		process.exit(1);
+  	}
+	****/
+};
+
+// Configure the request
+var options = {
+    //url: 'http://104.236.230.185:8080/pings', //URL to hit
+    //uri: 'http://104.236.230.185:8080/pings', //URL to hit
+    uri: 'http://localhost:8080/pings', //URL to hit
+    //url: 'http://findtrkr.com:8080/pings',
+    method: 'POST',
+    headers: headers,
+    qs: {'uid': uid, 'did': '0'},
+    timeout: 1000,
+    //json: true,
+    body: JSON.stringify({
+        source: 'pinger',
+        uid: uid,
+	oid: '01',
+	tid: '01',
+	loc: {
+		lat: lat,
+		lon: lon,
+		source: 'pinger'
+		}
+	})
+};
+
+
+// now start loop
+while (steps > 0){
+	console.log("step="+steps);
+
+	console.log(options);
+	
+	request(options, callback);
+		
+	// if random then modify here
+	if (argv.r) {
+		console.log("generating random movement");
+	}
+	
+	// delay for delay minutes
+	if (steps > 1){
+		// delay minutes
+		console.log("delaying "+ delay + " minutes");
+	}
+
+	steps --;
+}
+
+console.log("got to end");
+process.exit(0);
+
+// EOF
