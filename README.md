@@ -1,9 +1,10 @@
 # TRKR-Pinger
 
-[![Build Status](https://secure.travis-ci.org/shapeshed/weatherme.png)](http://travis-ci.org/shapeshed/weatherme)
-[![Code Climate](https://codeclimate.com/repos/52813f607e00a4097e0f98de/badges/a9ac9377fa3fb672affa/gpa.png)](https://codeclimate.com/repos/52813f607e00a4097e0f98de/feed)
+for Bluemixathon: Operation Rescue & Recovery 2015
 
-Pinger is a simple command line tool to generate pings to TRKR
+See more information on our TRKR (Tracker) Entry on [DevPost](http://devpost.com/software/trkr)
+
+Pinger is a simple command line Node.js tool to generate member location and status pings to TRKR
 
 ## Installation
 
@@ -23,12 +24,12 @@ Pinger is a simple command line tool to generate pings to TRKR
 
 Get the [lat-long co-ordinates][1] for the location you want.
 
-    ♣ pinger -u 17b1e3cae7b68e290654b43 -l 51.8498698,-0.6637842
+    pinger -u 17b1e3cae7b68e290654b43 -l 51.8498698,-0.6637842
 
 Will send a sing ping for uid to TRKR at location.  Location can also be set before the pinger call:
 
-    ♣ export PINGER_LATLON=51.8498698,-0.6637842
-    ♣ pinger -n 5 -u 17b1e3cae7b68e290654b43 
+    export PINGER_LATLON=51.8498698,-0.6637842
+    pinger -n 5 -u 17b1e3cae7b68e290654b43 
 lat = 20 lon = 30
 step=5
 delaying 1 minutes
@@ -72,15 +73,16 @@ These examples assume the environment variable PINGER_LATLON has been set.
 
 ### Run a single ping
 
-    ♣ pinger -u 17b1e3cae7b68e290654b43
+    pinger -u 17b1e3cae7b68e290654b43
     Ping from 51.8498698,-0.6637842 with status of OK sent at date
 
 ### Ping 8 times with a delay of 60 minutes and random movement
 
-    ♣  pinger -u 17b1e3cae7b68e290654b43 -n 8 -d 60 -r 
+    pinger -u 17b1e3cae7b68e290654b43 -n 8 -d 60 -r 
 
 [1]: http://dbsgeo.com/latlon/
 [2]: http://linux.die.net/man/1/column
 
+---
 Released under the [MIT License] (http://opensource.org/licenses/MIT)
 Copyright @ 2015 [RKOSecurity] (http://www.rkosecurity.com)
