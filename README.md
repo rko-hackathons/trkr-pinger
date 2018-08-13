@@ -83,6 +83,8 @@ These examples assume the environment variable PINGER_LATLON has been set.
 [1]: http://dbsgeo.com/latlon/
 [2]: http://linux.die.net/man/1/column
 
----
-Released under the [MIT License] (http://opensource.org/licenses/MIT)
-Copyright @ 2015 [RKOSecurity] (http://www.rkosecurity.com)
+## License
+
+Released under the [MIT License](http://opensource.org/licenses/MIT)
+
+Copyright @ 2015 [RKOSecurity](http://www.rkosecurity.com)
